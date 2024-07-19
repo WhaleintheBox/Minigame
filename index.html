@@ -110,8 +110,29 @@
         <script type="text/javascript" src="html5game/WITB Final.js?cachebust=301643162"></script>
 
         <!-- Builtin injector for injecting runner path -->
+
+        <script>
+            const elem = document.documentElement;
+
+            // Request full screen
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.mozRequestFullScreen) { // Firefox
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { // IE/Edge
+                elem.msRequestFullscreen();
+            }
+
+            // Lock the screen orientation to landscape
+            if (screen.orientation && screen.orientation.lock) {
+                screen.orientation.lock('landscape').catch(err => {
+                    console.error('Orientation lock failed: ', err);
+                });
+            }
         
-        <script>screen.orientation.lock("landscape");</script>
+        </script>
         <script>window.onload = GameMaker_Init;</script>
 
         <!-- Builtin injector for injecting google analytics code -->
