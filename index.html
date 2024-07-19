@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta charset="utf-8"/>
     <meta http-equiv="pragma" content="no-cache"/>
-    <title>Whale in the Box - Mini Game</title>
+    <title>Created with GameMaker</title>
     <style>
         body {
             background: black;
@@ -68,26 +68,16 @@
     <script type="text/javascript" src="html5game/WITB Final.js?cachebust=301643162"></script>
     <script>
         const elem = document.documentElement;
-        function toggleFullscreen() {
-            if (!document.fullscreenElement) {
-                elem.requestFullscreen().catch(err => {
-                    alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
-                });
-            } else {
-                document.exitFullscreen();
-            }
-        }
-        if (screen.orientation && screen.orientation.lock) {
-            screen.orientation.lock('landscape').catch(err => {
-                console.error('Orientation lock failed: ', err);
-            });
-        }
         function adjustCanvas() {
             const canvas = document.getElementById('canvas');
             if (window.innerHeight > window.innerWidth) {
                 // Portrait mode
                 canvas.style.width = 'auto';
                 canvas.style.height = '100vh';
+                // Unlock orientation
+                if (screen.orientation && screen.orientation.unlock) {
+                    screen.orientation.unlock();
+                }
             } else {
                 // Landscape mode
                 canvas.style.width = '100vw';
