@@ -1,0 +1,497 @@
+This note is high-level documentation for the core parts of this template project.
+All events in this project are commented, so you can open any event and read the comments to understand what it does, and how it works.
+
+# Animation Curves
+
+There is 1 Animation Curve witin this project:
+
+ac_flag_warp
+	Contains one warp channel that is used by the flag object when dropped to warp its image scale.
+
+
+
+# Fonts
+
+There are 4 Fonts witin this project:
+
+fnt_rowdies_22
+fnt_rowdies_28
+fnt_rowdies_34
+fnt_rowdies_56
+
+
+
+# OBJECTS
+
+There are 38 Objects witin this project:
+
+Collectables
+
+	obj_chest
+		The Chest object players will try to collect within the room.
+		Create				Creates a sequence for chests idle animation as well as shadow object. Also defines create_sparkes function.
+			create_sparkles()		- Function called to make 3 sets of particle effects at offsets for the players chest effects.
+		Step				Moves the object at game speed and controls the sequnce attached destoying if no longer needed since off screen.
+		Draw				Draws the base chest sprite only when idle.
+		-><- obj_player		Checks if the chest has been collected before creating coins for the player and handling the change of sequences destroying itself after use.
+	
+	obj_coin_gui
+		The coin object that apears after players collect coins in game, will head towards the players coin icon in their HUD when collected.
+		Create				Sets movement and send info to the gamemanager that it existing has added coins to the totals.
+		Destroy				Destroys any particle attached to it that are still alive.
+		Step				Moves towards the coin icon inside the player HUD.
+		-><- obj_gui		Destroys self since has reached where it needs to go.
+	
+	obj_pickup_boost
+		The pickup players will need to collect to activate their booster.
+		Step				Moves when needed destroying itself when off screen.
+		-><- obj_player		Creates new particle effect when hit and destroys itself.
+		
+	obj_pickup_coin
+		The coin objects players will need to pick up within the game.
+		Step				Moves when needed destroying when off screen.
+		-><- obj_player		Creates gui coin and effects when hit destroying itself after.
+		Animation End		Detroys itself after spite collected effect.
+		
+	obj_pickup_shield
+		The pickup players will need to collect to activate or extend their shield.
+		Step				Moves pickup along at current speed destroying if offscreen.
+		-><- obj_player		Creates shield attached to the player and sets up its life and inital particle effect.
+		-><- obj_shield		Checks if the shield is still alive before adding life time to it and creating another particle effect.
+
+Environment
+	obj_far_background
+		The main far scrolling background the player sees in game.
+		Create				Sets up and loads the sprites going to be used.
+		Step				Moves and cycles through sprites as the need changed.
+		Draw				Draws the 3 sprites to cover the entire screen.
+		
+	obj_firework
+		Firework object that is used for the flag, controls the particle effect manager spawning and setting needed to simulate fireworks.
+		Create				Sets up the variables needed for the fireworks handling. Also creates the create_ps function.
+			create_ps(type)			- Function for creating a new handled particle effect at a specific tilt angle of the defined type.
+		Step				Moves and updates the firework as needed ajusting its speed and effects depending on its life.
+		
+	obj_flower
+		Flower object that is spawned over the ground tiles where needed and moves as the game does until offscreen and destroyed.
+		Step				Updates position as needed and destroys when offscreen.
+		
+	obj_front_ceiling
+		Controls the celing vines that appear scolling in front of the player.
+		Create				Sets up arrays of variables for the vines needed setting up their positions in valid places.
+		Step				Updates the positions as game speed moves, resetting the positions when needed and setting alpha channels as they enter the screen.
+		Draw				Draws the vines at ther specified alpha values.
+		
+	obj_front_floor
+		Controls the ground foliage in front of the stage.
+		Create				Sets up arrays of variables for the folliage needed. Setting up their positions in valid places.
+		Step				Moves the foliage as the game updates, repostioning them and resetting them as they go offscreen again into valid places.
+		Draw				Draws depending on set alpha channels.
+		
+	obj_interior_background
+		Controls the inside and outside runways and walls for the main stage the player runs through. Scrolls and displays appropriate tiles depending on the state defined.
+		Create				Sets up states for interor and exterior modes. Creates 3 arrays for the background walls, walkways and pipes prefetching all the assets too. Also creates multiple functions.
+			change_interior_state()	- When called swaps all the required states checks to the next possible version.
+			flower_set_1(x,y),2,3,4	- Functions for setting flower objects in preset locations.
+		Step				Moves all the objects contained within and sets objects along as needed depending on states as they change.
+		Draw				Loops though and draws all the sprites as needed in their specified locations.
+		
+	obj_mid_background
+		Background tree line sprites imediately behind the stage. Maintains scrolling and order.
+		Create				Loads in needed midground sprites and sets up their positions inside arrays.
+		Step				Updates the locations and cycles the displayed sprites as needed.
+		Draw				Draws the 3 sprites needed to fill the visible play area.
+		
+Managers
+	obj_debugger
+		Object that handles all the debug menu options and controls (not project essential) - Use "SHIFT" + "TAB" to open in game.
+		Create				Sets up the debug menu and functionality of buttons within it.
+			button_interior()		- Toggles the interior state.
+		Step				Handles the key inputs for debug options as well as updating its variables when open.
+	
+	obj_game_manager
+		Main game manager object of the game. Spawns all the game essential components on its create. Controls the main games state as well as all the speed the environments move at instead of passing this through the player.
+		Create				Sets up the game states and creates the games needed objects for the environment and player as well as checking if a tutorial will need to take place or not. Also creates speed update function.
+			update_speed(delta_time)- Updates the speed to the needed levels.
+		Step				Updates the level as coins collected adjusting speed where needed and tracks the games state.
+	
+	obj_particle_manager
+		Particle effect handler object used for creating, updating and destroying particle effects.
+		Create				Sets up movement options including drag and creates funtions for further customisation.
+			set_angle(angle)		- Adjusts the angle particle system is set to.
+			set_offset(x, y)		- Creates and offsets the particle systems position.
+			set_particle(ps, layer)	- Sets what particle emitter should be used and on what layer.
+		Destroy				Destroys the particle system aswell.
+		Step				Check how the object should behave and moves it as needed.
+		
+	obj_sequence_manager
+		Sequence handler object used for creating, updating and the end of life for squences set to them.
+		Create				Setup for sequence and death handling.
+			set_death(function)		- Hands the sequence a function to call after it finishes.
+			create_seq(seq, layer)	- Sets up what sequence should be used on what layer.
+		Step				Updates the sequence position and handles the call for when it finishes.
+		
+	obj_spawn_manager
+		Manager object that handles the spawn rate and spawn patterns for coins, powerups and enemies.
+		Create				Sets up the cooldowns for spawners and the fuctions called when they trigger.
+			spawn_enemy()			- Spawns a random enemy or obstacle at preset location.
+			spawn_powerup()			- Spawns a random powerup at preset locations.
+			spawn_reward(type)		- Spawns the specified reward set of coins or chest at set position.
+		Step				Updates the cooldowns and checks what should spawn when it is time to do so.
+		
+	obj_splash_manager
+		Object used inside the splash screen. Sets up and loads in a lot of global settings.
+		Create				Checks if game is in touch screen and loads in highscore setting the global variables.
+		Key Down - Keypad 1	Resets the players highscore.
+		
+Obstacles
+	obj_alert
+		Object that is created to warm players of incoming obstacles from off screen.
+		Create				Sets the alerts inital alpha and fade rates.
+		Destroy				Stops the sounds from this object.
+		Step				Updates the position and alpha depending on how close the enemy from off screen is.
+		Animation End		Changes the sprite type after its first cycle.
+		
+	obj_beam
+		Obstacle that players will be hurt by if collided with.
+		Create				Sets the beam state and creates the alerts attached to it. 
+		Destroy				Stops the sounds from this object.
+		Step				Updates its position as creates the beam effects as need be.
+		Draw				Draws main beam bodt and attached heads.
+		-><- obj_player		Checks if has has already triggered before calling hit function on player.
+		
+	obj_enemy
+		Moving enemy obstacle that players will be hurt by if collided with.
+		Create				Sets up the enemy and creates a shadow to follow the enemy.
+		Step				Moves the position as needed pausing animation and movement when game is paused.
+		-><- obj_player		Checks if has been hit before calling hit function on player.
+		
+Player
+	obj_flag_marker
+		Highscore indicator, will be spawned at the highscore of players if set and used when players die to indicate they have set a new highscore.
+		Create				Sets up variables for the flags warping bounce and knowing if it should drop or not.
+			create_firework()		- Function for calling and creatinga new firework, checking if flag still exists before doing so.
+		Step				Checks if the flag should drop or not, checking for player passing if it needs to and calls a repeating firework call if it has dropped as a new highscore.
+		Draw				Draws the flag and text on it warping the image values as needed and only displaying the text on it after dropping.
+		
+	obj_player
+		The main player object, keeps track of what state the player is in and displays as appropriate.
+		Create				Creates the player state to keep track of what state it should be in, also creates its shadow object and kill function.
+			kill_player()			- Function called when the player is suceessfully hit by an enemy or obstacle. Checks for shields and breaks them or begins the players death action.
+		Destroy				Stops the sounds from this object.
+		Step				Checks the players movement inputs and applies them when possible changing the state its in depending on how fast its going or if its grounded or not.
+		End Step			Creates new particle effects depending on what state the player is in.
+		Draw				Changes the player sprites animation speed depending on what state it is in.
+		Animation End		Controls the players flying to idle state as well as if the player is dead it fully hides its alpha.
+		
+	obj_shadow
+		Shadow object that is set to follow the player, enemies or chests and be dynamic in scale and alpha if needed.
+		Create				Sets up the shadpw variables and functions for customisation.
+			set_y_offset(y)			- Sets the y offset and applies it the the shadows position.
+			fade_out(time)			- Begins the fade out effect that takes the passed in time before it becomes invisible.
+		Step				Checks the position of the owner adjusting as need be and fading out when state has been set to that.
+		
+	obj_shield
+		Shield object used for when the player has the shield powerup enabled.
+		Create				Sets up the shields life and pulsing state.
+		Destroy				Stops the sounds from this object.
+		Step				Adjusts the position to the player and checks for when it can pulse, also swaps the shield into the breaking state when it has finished its life.
+		Draw				Controls the animation speed based on if the game is paused and also creates the blend pulsing light effect when the life is running low, setting the blend to a new colour.
+		Animation End		Destroys the shield when the sprite has finished playing its breaking animation.
+		
+UI
+	Buttons
+		obj_button_base
+			Parent object for all UI buttons.
+			Create				Presets the different scaled values for highlighted and pressed states as well as an empty function for adding the buttons functionality into.
+			Step				Checks if the button can scale and scales as needed. Also checks if mouse position is still over the button highlighting it.
+			Draw				Draws a panel sprite behind button if needed as well as the button itself.
+			Left Pressed		Checks if hovered and pushes button.
+			Left Released		Checks if hovered and pushed and triggers function.
+			Mouse Enter			Sets to hover.
+			Mouse Leave			Sets mouse fully back to default.
+			
+		obj_button_home
+			Button for returning to the splash screen inside menus. (CHILD of obj_button_base)
+			Create				Sets new function for returning to splash screen.
+			Step				Checks for gamepad and keyboard inputs.
+			
+		obj_button_mute
+			Button for toggling the mute option inside the main menu. (CHILD of obj_button_base)
+			Create				Sets new function for toggling the master gain being muted or not.
+			Step				Checks for gamepad and keyboard inputs.
+			
+		obj_button_pause
+			Button used for pausing the game while being played. (CHILD of obj_button_base)
+			Create				Sets new function for pausing the game.
+			Step				Checks for gamepad and keyboard inputs.
+			
+		obj_button_play
+			Button used for starting the game from the splash screen. (CHILD of obj_button_base)
+			Create				Sets new function for starting a new game.
+			Step				Checks for gamepad and keyboard inputs.
+			
+		obj_button_play_paused
+			Button used for resuming the game from the pause menu. (CHILD of obj_button_base)
+			Create				Sets new function for resuming the game.
+			Step				Checks for gamepad and keyboard inputs.
+			
+		obj_button_quit
+			Button used to exit the game from the spash screen. (CHILD of obj_button_base)
+			Create				Sets new function for exiting the game.
+			Step				Checks for gamepad and keyboard inputs.
+			
+		obj_button_retry
+			Button used in menus to restart the players attempt. (CHILD of obj_button_base)
+			Create				Sets new function for restarting the game.
+			Step				Checks for gamepad and keyboard inputs.
+			
+		obj_button_skip
+			Button used during the tutorial to skip the tutorial if players desire. (CHILD of obj_button_base)
+			Create				Sets new function for ending the tutorial.
+			Step				Checks for gamepad and keyboard inputs.
+			
+	obj_banner_gameover
+		Banner used in gameover screen to control the menu.
+		Destroy				Cleans up the other objects that make up the gameover screen.
+		Draw				Draws the banner background and checks values of highscore and current score to determine what text should be displayed.
+		
+	obj_banner_paused
+		Banner used in the pause screen to control the menu.
+		Destroy				Cleans up the other objects that make up the pause screen and returns the audio to normal levels.
+		Step				Adjusts the audio based on the image alpha.
+		Draw				Draws the banner background and paused text.
+		
+	obj_gui
+		HUD object that exists in the top left of the game displaying the players distance and coins.
+		Draw				Draws the needed HUD text values.
+		
+	obj_tutorial
+		Banner like object that controls the tutorial display and limits player control during this tracking criteria.
+		Create				Sets up the tutorial control options and checking what exists and changing the inital text to this.
+		Step				Walks through the different steps of the tutorial using a action timer to track the different requirements to progress, closing the tutorial when finished.
+		Draw				Draws the tutorial background and text that was set within the step event.
+	
+
+
+# PARTICLE SYSTEMS
+
+There are 25 Particle Systems within this project:
+
+Collectables
+	ps_chest_blast
+		Effect for when chest is smashed open and coins come out.
+	ps_coin
+		Effect for when coins are collected.
+	ps_confetti
+		Effect for when highscore flag is passed.
+	ps_powerup_in
+		Effect for when powerup is collected.
+	ps_powerup_out
+		Effect for when powerup ends.
+	ps_sparkle_chest
+		Effect for chest idle sparkles.
+Fireworks
+	ps_firework
+		Firework main explosion.
+	ps_firework_trail
+		Smoke trail for firework.
+	ps_sparkle
+		Used by firework effect on death of other particles.
+Player
+	ps_defeat
+		Effect for when player is finally defeated and begins dying.
+	ps_dust_small
+		Small dust particle effect used when player jumps initally off the ground or lands on it.
+	ps_flag_smoke
+		Smoke effect for when flag lands on the ground after being dropped.
+	ps_flame_glow
+		Glow effect for the thruster flames.
+	ps_inital_jump_flame
+		Jump flame when first jumping.
+	ps_long_press_flame
+		Larger flame when faster thrusting up.
+	ps_long_press_smoke
+		Larger smoke effect for faster thrusting action.
+	ps_run_dust
+		Dust effect that appears by the players feet.
+	ps_short_press_flame
+		Smaller flame effect for normal thrusting.
+	ps_short_press_smoke
+		Smaller smoke effect for normal thrusting.
+	ps_speed_booster_aura
+		Aura effect over player when boosting.
+	ps_speed_booster_flame
+		Flame effect for player boosting.
+	ps_speed_booster_smoke
+		Smoke effect for player boosting.
+Shimmers
+	ps_glimmers
+		Used when player is ruuning at normal speed in background.
+	ps_glimmers_intense
+		Same as above with more intensity for faster speeds.
+ps_enemy_laser
+	Particle emitter attached to the beam ends to give them an enhansed beam effect.
+
+
+
+# ROOMS
+
+There are 2 Rooms within this project:
+
+rm_splash
+	This is the main menu room and is the first room that is loaded into within the project.
+	
+	Instances			The instances layer of the room is the only instance layer at start with only the "obj_splash_manager" on it.
+	Background			The background layer has the spash screen background sprite set to it.
+	
+rm_main
+	This is the main gameplay room of the game and is where all the game takes place.
+	
+	GUIFrontEffects		Effects layer for GUI objects that need particle effects added infront of them.
+	GUI					Instance layer for GUI objects that aren't drawn using the gui draw events. Has hud object and pause button object added to it.
+	ForegroundEffects	Effects layer for any forground particle effects.
+	Foreground			Instance layer for forground objects such as the celing and floor foliage.
+	StageFrontEffects	Effects layer for stage front objects.
+	StageFront			Instance layer for objects that need to exist at the front of the stage such as enemies and obstacles.
+	StageEffects		Effects layer for stage particle effects
+	Stage				Instance layer for player and centre of gameplay.
+	StageBackEffects	Effects layer for particle effects infront of stage back objects.
+	StageBack			Instance layer for setting stage back obects too such as coins.
+	StageShadowsEffects	Effects layer for particle effects behind stage back objects.
+	StageShadows		Instance layer for the shadow objects to appear under objects.
+	MidgroundEffects	Effects layer for setting midground particle effects to.
+	Flowers				Instance layer for the flower objects that appear over the ground tiles.
+	Midground			Instance layer for midground objects like the ground tiles and interior walls
+	SunRays				Asset layer with sun ray sprite added also has an added ripples filter attached.
+	Farground			Instance layer for farground objects.
+	Managers			Instance layer, has the game manager, spawn manager and debugger objects added to it to manage the gameplay.
+	Background			Background layer, has nothing set it it.
+
+
+
+# Scripts
+
+There are 2 Scripts within this project:
+
+scr_custom
+	Contains custom functions for this project:
+		- smoothstep
+				Function take in min value, max value and a percentage and will return an interpolated value between the min and max based on a smoothstep curve where the value should be.
+		- parse_value
+				Takes in a value and returns a readable string of the value rounded with notation based on its size in shorthand (K for thousand, M for million etc).
+		- get_gamestate
+				Returns the current gamestate in a string format.
+		- get_interiorstate
+				Returns the current interior state in a string format.
+scr_debug
+	Contains functions for use by the debug menu (can also be typed into console).
+		- bug_restart
+				Restarts the current room when called.
+		- bug_set_state
+				Forces the gamestate to change to set state.
+
+
+# SEQUENCES
+
+There are 6 sequences within this project:
+
+Coin Layouts
+	seq_gm_layout
+		Sequence used to fill in the intial deadspace when a level begins with a preset layout of coin objects in the shape of the GameMaker Logo.
+seq_chest_breaking
+	Sequence played when the player impacts with the chest objects breaking them and collecting the coins.
+seq_chest_idle
+	Idle chest sequence to animate the chest jiggling.
+seq_gameover
+	Sequence that creates the game over screen.
+seq_pause
+	Sequence that creates the pause screen.
+seq_splash
+	Sequence that creates the splash screen.
+
+
+
+# Sounds
+
+There are 39 sound files within this project:
+
+They are organised by their type
+	Collectables
+		Played when the player collects powerup or coins/chests.
+	Collisions
+		Played when the player or shield collides with enemies or sounds associated with that.
+	Fireworks
+		Sounds played for the firework celebration effects.
+	Footsteps
+		Chicken
+			Chicken footstep variations.
+		Dino
+			Dino footstep variations.
+	Jet
+		Player jet sound effects.
+	Music
+		Played in the background for the main game and menus with ambience for when the player dies.
+	UI
+		Sounds for all UI buttons and popups.
+		
+		
+
+# SPRITES
+
+There are 72 sprites within this project:
+
+They are organised by their use.
+	Actors
+		Beam
+			Sprites used to make up the body and head of the beam obstacle.
+		Character
+			Main character assets for its different actions as well as its shadow.
+		Chest
+			Chest assets for the body, lid and shadow.
+		Coin
+			Sprites used for the coins used inside the level.
+		Enemy
+			Dinosaur enemy asset including its shadow.
+		Icon
+			Icons used for warningd from enemies/obstacles as well as the powerups and flag.
+		Shield
+			Shield sprites on and off animations.
+	Background
+		Farground
+			Farground spries used in evironment scrolling as well as static sun rays in background.
+		Flowers
+			Flower sprites used to spawn over the ground tiles.
+		Foreground
+			Floor and celing foliage that parallaxs with the backgrounds.
+		Midground
+			Main backgrounds that apear behing the runways and walls.
+		Pipe
+			Pipe sprites that appear on the celings on the interior.
+		Runway
+			Tileable sprites that make up the inside and outside floors the player runs on.
+		Wall
+			The interior wall sprites that start and end when the game transitions from inside to outside.
+	GUI
+		Buttons
+			Menus button sprites for splash screen and any in game menus.
+		UI
+			Hud elements for the players score and the menu banner backgrounds.
+		Also contains spalsh screen sprite assets.
+	Particles
+		Sprites used by the particle emitters throughout the project.
+
+
+
+~~ Possible Edits! ~~
+
+If you want to edit parts of this project to make it more unique and personal feel free to!
+
+Why not try:
+	- Setting up different coin arangements to spawn in.
+	- Creating new powerups to give the player new advantages.
+	- Making different enemies that can appear and make the game much more challengeing.
+	- Changing the assets to make new levels or different characters.
+	- Or use this as an idea of how to make your own game from scratch!
+	
+Don't forget to share what you make to gx.games so others can play your game too!

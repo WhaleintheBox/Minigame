@@ -1,0 +1,27 @@
+{
+  "$GMParticleSystem":"",
+  "%Name":"ps_chest_blast",
+  "backdropHeight":768,
+  "backdropImageOpacity":0.5,
+  "backdropImagePath":"",
+  "backdropWidth":1366,
+  "backdropXOffset":0.0,
+  "backdropYOffset":0.0,
+  "drawOrder":0,
+  "emitters":[
+    {"$GMPSEmitter":"","%Name":"Coin","additiveBlend":false,"directionIncrease":0.0,"directionMax":135.0,"directionMin":55.0,"directionWiggle":0.0,"distribution":0,"editorColour":1090519039,"editorDrawShape":true,"emitCount":10,"emitDelayMax":0.0,"emitDelayMin":0.0,"emitDelayUnits":0,"emitIntervalMax":1.0,"emitIntervalMin":1.0,"emitIntervalUnits":0,"enabled":true,"endColour":16777215,"GMPresetName":"","gravityDirection":270.0,"gravityForce":0.0,"headPosition":0.0,"lifetimeMax":60.0,"lifetimeMin":20.0,"linkedEmitter":null,"locked":false,"midColour":4294967295,"mode":0,"name":"Coin","orientationIncrease":0.0,"orientationMax":0.0,"orientationMin":0.0,"orientationRelative":true,"orientationWiggle":0.0,"regionH":1.0,"regionW":1.0,"regionX":0.0,"regionY":0.0,"resourceType":"GMPSEmitter","resourceVersion":"2.0","scaleX":0.4,"scaleY":0.4,"shape":1,"sizeIncrease":0.0,"sizeMax":2.0,"sizeMin":1.0,"sizeWiggle":0.0,"spawnOnDeathCount":0,"spawnOnDeathGMPreset":null,"spawnOnDeathId":null,"spawnOnUpdateCount":0,"spawnOnUpdateGMPreset":null,"spawnOnUpdateId":null,"speedIncrease":0.0,"speedMax":6.0,"speedMin":5.0,"speedWiggle":0.0,"spriteAnimate":false,"spriteId":{"name":"spr_coin_single","path":"sprites/spr_coin_single/spr_coin_single.yy",},"spriteRandom":false,"spriteStretch":true,"startColour":16777215,"texture":-1,},
+    {"$GMPSEmitter":"","%Name":"Line","additiveBlend":true,"directionIncrease":0.0,"directionMax":360.0,"directionMin":0.0,"directionWiggle":0.0,"distribution":0,"editorColour":1090519039,"editorDrawShape":true,"emitCount":16,"emitDelayMax":0.0,"emitDelayMin":0.0,"emitDelayUnits":0,"emitIntervalMax":1.0,"emitIntervalMin":1.0,"emitIntervalUnits":0,"enabled":true,"endColour":6354943,"GMPresetName":"","gravityDirection":270.0,"gravityForce":0.0,"headPosition":0.0,"lifetimeMax":60.0,"lifetimeMin":20.0,"linkedEmitter":null,"locked":false,"midColour":4285071336,"mode":1,"name":"Line","orientationIncrease":0.0,"orientationMax":0.0,"orientationMin":0.0,"orientationRelative":true,"orientationWiggle":0.0,"regionH":1.0,"regionW":1.0,"regionX":0.0,"regionY":0.0,"resourceType":"GMPSEmitter","resourceVersion":"2.0","scaleX":1.4,"scaleY":0.1,"shape":1,"sizeIncrease":0.0,"sizeMax":2.0,"sizeMin":2.0,"sizeWiggle":0.0,"spawnOnDeathCount":0,"spawnOnDeathGMPreset":null,"spawnOnDeathId":null,"spawnOnUpdateCount":0,"spawnOnUpdateGMPreset":null,"spawnOnUpdateId":null,"speedIncrease":0.0,"speedMax":8.0,"speedMin":4.0,"speedWiggle":0.0,"spriteAnimate":false,"spriteId":null,"spriteRandom":false,"spriteStretch":true,"startColour":4280081663,"texture":8,},
+    {"$GMPSEmitter":"","%Name":"Blast","additiveBlend":true,"directionIncrease":0.0,"directionMax":360.0,"directionMin":0.0,"directionWiggle":0.0,"distribution":0,"editorColour":16777215,"editorDrawShape":true,"emitCount":3,"emitDelayMax":0.0,"emitDelayMin":0.0,"emitDelayUnits":0,"emitIntervalMax":1.0,"emitIntervalMin":1.0,"emitIntervalUnits":0,"enabled":true,"endColour":16759552,"GMPresetName":"","gravityDirection":270.0,"gravityForce":0.0,"headPosition":0.0,"lifetimeMax":20.0,"lifetimeMin":20.0,"linkedEmitter":null,"locked":false,"midColour":4281516543,"mode":1,"name":"Blast","orientationIncrease":0.0,"orientationMax":0.0,"orientationMin":0.0,"orientationRelative":false,"orientationWiggle":0.0,"regionH":1.0,"regionW":1.0,"regionX":0.0,"regionY":0.0,"resourceType":"GMPSEmitter","resourceVersion":"2.0","scaleX":3.0,"scaleY":3.0,"shape":1,"sizeIncrease":0.0,"sizeMax":2.0,"sizeMin":1.0,"sizeWiggle":0.0,"spawnOnDeathCount":0,"spawnOnDeathGMPreset":null,"spawnOnDeathId":null,"spawnOnUpdateCount":0,"spawnOnUpdateGMPreset":null,"spawnOnUpdateId":null,"speedIncrease":0.01,"speedMax":1.0,"speedMin":1.0,"speedWiggle":0.0,"spriteAnimate":false,"spriteId":null,"spriteRandom":false,"spriteStretch":true,"startColour":4280211967,"texture":8,},
+  ],
+  "name":"ps_chest_blast",
+  "parent":{
+    "name":"Collectables",
+    "path":"folders/Particle Systems/Collectables.yy",
+  },
+  "resourceType":"GMParticleSystem",
+  "resourceVersion":"2.0",
+  "showBackdrop":true,
+  "showBackdropImage":false,
+  "xorigin":0,
+  "yorigin":0,
+}

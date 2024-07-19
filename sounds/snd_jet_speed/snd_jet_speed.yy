@@ -1,0 +1,25 @@
+{
+  "$GMSound":"",
+  "%Name":"snd_jet_speed",
+  "audioGroupId":{
+    "name":"audiogroup_default",
+    "path":"audiogroups/audiogroup_default",
+  },
+  "bitDepth":1,
+  "bitRate":128,
+  "compression":0,
+  "conversionMode":0,
+  "duration":5.32898,
+  "name":"snd_jet_speed",
+  "parent":{
+    "name":"Jet",
+    "path":"folders/Sounds/Jet.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"snd_jet_speed.mp3",
+  "type":0,
+  "volume":1.0,
+}
