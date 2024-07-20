@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0", viewport-fit=cover />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta charset="utf-8"/>
     <meta http-equiv="pragma" content="no-cache"/>
@@ -34,6 +34,7 @@
             -webkit-interpolation-mode: nearest-neighbor;
             -ms-touch-action: none;
             touch-action: none;
+            position: fixed;
         }
         .gm4html5_div_class {
             width: 100%;
@@ -57,6 +58,20 @@
         .gm4html5_login_header {
             text-align: center;
         }
+        @media screen and (orientation: landscape) {
+        html, body, #gameContainer, .gm4html5_div_class {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        canvas {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain;
+        }
+    }
     </style>
 </head>
 
@@ -70,33 +85,44 @@
     </div>
     <script type="text/javascript" src="html5game/WITB Final.js?cachebust=301643162"></script>
     <script>
-        function adjustCanvas() {
-            const canvas = document.getElementById('canvas');
-            const container = document.getElementById('gameContainer');
-            const aspectRatio = canvas.width / canvas.height;
-            let newWidth, newHeight;
+    function adjustCanvas() {
+        const canvas = document.getElementById('canvas');
+        const container = document.getElementById('gameContainer');
+        const aspectRatio = canvas.width / canvas.height;
+        let newWidth, newHeight;
 
-            if (window.innerWidth / window.innerHeight > aspectRatio) {
-                newHeight = window.innerHeight;
-                newWidth = newHeight * aspectRatio;
-            } else {
-                newWidth = window.innerWidth;
-                newHeight = newWidth / aspectRatio;
-            }
+        const screenWidth = window.innerWidth || screen.availWidth;
+        const screenHeight = window.innerHeight || screen.availHeight;
 
-            canvas.style.width = newWidth + 'px';
-            canvas.style.height = newHeight + 'px';
+        if (screenWidth / screenHeight > aspectRatio) {
+            newHeight = screenHeight;
+            newWidth = newHeight * aspectRatio;
+        } else {
+            newWidth = screenWidth;
+            newHeight = newWidth / aspectRatio;
         }
 
-        window.addEventListener('resize', adjustCanvas);
-        window.addEventListener('orientationchange', adjustCanvas);
+        canvas.style.width = newWidth + 'px';
+        canvas.style.height = newHeight + 'px';
 
-        window.onload = function() {
-            adjustCanvas();
-            if (typeof GameMaker_Init === "function") {
-                GameMaker_Init();
-            }
-        };
+        canvas.style.position = 'fixed';
+        canvas.style.left = '50%';
+        canvas.style.top = '50%';
+        canvas.style.transform = 'translate(-50%, -50%)';
+    }
+
+    window.addEventListener('resize', function() {
+        setTimeout(adjustCanvas, 100);
+    });
+    window.addEventListener('orientationchange', function() {
+        setTimeout(adjustCanvas, 100);
+    });
+    window.onload = function() {
+        adjustCanvas();
+        if (typeof GameMaker_Init === "function") {
+            GameMaker_Init();
+        }
+    };
     </script>
 </body>
 
